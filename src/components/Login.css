@@ -1,0 +1,211 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family:-apple-system, BlinkMacSystemFont, "segoe ui", roboto, oxygen, ubuntu, cantarell, "fira sans", "droid sans", "helvetica neue", sans-serif;
+  }
+  
+  .login {
+    position: relative;
+    width: 1920px;
+    height: auto;
+    background: #FFFFFF;
+  }
+  
+  a {
+    text-decoration: none;
+  }
+  
+  .login-form {
+    position: absolute;
+    width: 483px;
+    height: 463px;
+    left: 724px;
+    top: 155px;
+  
+    background: #FFFFFF;
+    box-shadow: 0px 4px 48px -12px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+  }
+  
+  .app-title {
+    position: absolute;
+    width: 190px;
+    height: 55px;
+    left: 152px;
+    top: 36px;
+  }
+  
+  .app-title svg {
+    align-items: center;  
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: auto;
+    top: auto;
+  } 
+  
+  input {
+    appearance: none;
+    border-radius: 0;
+    background-color: #F8F9FA;
+    border: none;
+    outline: none;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 28px;
+    color: #575757;;
+  }
+  
+  label {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: #222222;
+  }
+  
+  .account {
+    position: absolute;
+    width: 411px;
+    height: 64px;
+    left: 36px;
+    top: 119px;
+  
+    background: #F8F9FA;
+    border-radius: 8px;
+  }
+  
+  .account:focus {
+    border: 1px solid red;
+  }
+  
+  .account label {
+    position: absolute;
+    width: 119px;
+    height: 15px;
+    left: 24px;
+    top: 14px;
+  
+    
+  }
+  
+  .account input {
+    position: absolute;
+    width: 82px;
+    height: 17px;
+    left: 24px;
+    top: 33px;
+  }
+  
+  .password {
+    position: absolute;
+    width: 411px;
+    height: 64px;
+    left: 36px;
+    top: 199px;
+  
+    background: #F8F9FA;
+    border-radius: 8px;
+  }
+  
+  .password label {
+    position: absolute;
+    width: 61px;
+    height: 15px;
+    left: 24px;
+    top: 14px;
+  }
+  
+  .password input {
+    position: absolute;
+    width: 80%;
+    height: 17px;
+    left: 24px;
+    top: 33px;
+  }
+  
+  
+  
+  .forgot-pw {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  
+    position: absolute;
+    width: 135px;
+    height: 20px;
+    left: 170px;
+    top: 279px;
+  }
+  
+  .forgot-pw a {
+    position: static;
+    height: 20px;
+    left: 22.58%;
+    right: 0%;
+    top: calc(50% - 20px/2);
+  
+    /* button/small/bold 13 */
+  
+    /* font-family: Inter; */
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    line-height: 20px;
+    /* identical to box height, or 154% */
+  
+  
+    /* Color/Primary (CTA) */
+  
+    color: #355DFF;
+  
+  
+    /* Inside Auto Layout */
+  
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    margin: 0px 12px;
+  }
+  
+  .submit-btn {
+    color: #FFFFFF;
+    position: absolute;
+    width: 411px;
+    height: 56px;
+    left: 36px;
+    top: 335px;
+    background: #355DFF;
+    border: #355DFF solid 0px;
+    border-radius: 8px;
+  }
+  
+  .submit-btn:hover {
+    cursor: pointer;
+    background: rgb(31, 31, 201);
+  }
+  
+  .signin {
+    position: absolute;
+    width: 114px;
+    height: 20px;
+    left: 185px;
+    top: 407px;
+  
+  /* button/small/bold 13 */
+  
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    line-height: 20px;
+    /* identical to box height, or 154% */
+  
+  
+    /* Color/Primary (CTA) */
+  
+    color: #355DFF;
+  
+  }
+  
+  
