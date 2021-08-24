@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-style: normal;
+}
+
+.sidebar {
+  width: 256px;
+  position: fixed;
+  height: 100%;
+  z-index: 19;
+  background: #F8F9FA;
+}
+
+.menu-title {
+  height: 60px;
+}
+
+.menu-item {
+  color: #828282;
+}
+
+.menu-item:hover {
+  background: #eaeaf8;
+}
+
+.menu-item.active {
+  background: #dfe0ff;
+  color: #355dff;
+}
+
+.top-nav {
+  height: 60px;
+}
+
+.container {
+  margin-left: 256px;
+  width: calc(100% - 256px);
+}
+
+.user-reference {
+  color: #474d66;
+}
+
+.box-shadow-default {
+  box-shadow: rgb(67 90 111 / 30%) 0px 0px 1px, rgb(67 90 111 / 47%) 0px 2px 4px -2px;
+}
+
+.sv-bgr {
+  background-color: #F8F9FA;
+}
+
+a, a:hover, a:focus{
+  text-decoration: none;
+} 
+
+input,
+textarea {
+    appearance: none;
+    border-radius: 0;
+    background-color: #F8F9FA;
+    border: none;
+    outline: none;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 28px;
+    color: #575757;
+    resize: none;
+}
+
+label {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #222222;
+}
+
+.search-box {
+  border: rgb(216, 218, 229) solid 1px;
+  background: #F8F9FA;
+}
+
+.search-icon svg {
+  fill: rgb(105, 111, 140);
+}
+
+.group-titles , .created-chance {
+  border-bottom : 0.5px solid #e5e5ea;
+}
+
+.chance-title {
+  color: #8e8e93;
+}
+
+.created-item {
+  height: 46px;
+  padding: 13px 10px;
+}
+
+.count {
+  height: 27px;
+  padding: 3px 12px;
+  background-color: #f3f3f3;
+}
+
+.phone-color {
+  color : #4892ec;
+}
+
+.chance-item:hover {
+  background: #eaeaf8;
+}
