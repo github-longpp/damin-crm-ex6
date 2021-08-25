@@ -13,6 +13,10 @@ body {
   font-style: normal;
 }
 
+html, body, #root {
+  height: 100%;
+}
+
 .sidebar {
   width: 256px;
   position: fixed;
@@ -120,4 +124,9 @@ label {
 
 .chance-item:hover {
   background: #eaeaf8;
+}
+
+.login-form {
+  width: 483px;
+  background: #FFFFFF;
 }

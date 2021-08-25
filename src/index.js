@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -13,6 +13,10 @@ import CalendarIndex from './pages/calendar';
 import CustomerIndex from './pages/customer';
 import ServiceIndex from './pages/service';
 import UserIndex from './pages/user';
+import Signup from './pages/layouts/components/Signup';
+import CustomRoute from './components/CustomRoute';
+
+
 
 
 const titleData = [
@@ -42,22 +46,21 @@ const titleData = [
 function App() {
   const [title, setTitle] = useState();
   const [activeMenu, setActiveMenu] = useState();
-
   return (
     <AppContext.Provider value={{ title, setTitle: (value) => setTitle(value), activeMenu, setActiveMenu }}>
       <Router>
         <Switch>
-          <Route exact path='/login' component={Login} />
-          <Route path='/'>
+          <Route exact path='/' component={Login} />
+          <Route exact path='/signup' component={Signup} />
+          <CustomRoute path='/'>
             <MainLayout>
               {titleData.map((item) => {
                 return (
                   <Route exact path={item.path} component={item.component} />
                 )
-              })
-              }
+              })}
             </MainLayout>
-          </Route>
+          </CustomRoute>
 
         </Switch>
       </Router>
