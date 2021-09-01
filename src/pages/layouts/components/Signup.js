@@ -24,7 +24,7 @@ export class Signup extends Component {
     signup = async () => {
         let email = this.state.username
         let password = this.state.password
-        api.post('/', {
+        api.post('/auth/signup', {
             "email": email,
             "password": password
         }).then(

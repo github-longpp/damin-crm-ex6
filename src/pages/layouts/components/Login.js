@@ -34,7 +34,7 @@ export class Login extends Component {
             'password' : this.state.password
         }
         
-        api.post('auth/login', loginForm).then((res) => {
+        api.post('/auth/login', loginForm).then((res) => {
             localStorage.setItem('accessToken', res.data.accessToken)
             localStorage.setItem('refreshToken', res.data.refreshToken)
             this.setState({ redirect: true })
