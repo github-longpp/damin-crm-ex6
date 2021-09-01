@@ -1,11 +1,7 @@
 import React, { Component } from 'react'
 import { Pane, Button, toaster } from 'evergreen-ui';
-import axios from 'axios';
 import { Redirect } from 'react-router';
-
-const api = axios.create({
-    baseURL: 'http://localhost:4000/auth/signup'
-})
+import api from '../../../interceptor/AxiosInterceptor';
 
 export class Signup extends Component {
     constructor(props) {
