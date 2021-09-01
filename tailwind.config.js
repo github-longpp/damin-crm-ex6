@@ -808,6 +808,7 @@ module.exports = {
       '350': '350px',
       '400': '400px',
       '690': '690px',
+      '180': '180px',
     }),
     zIndex: {
       auto: 'auto',

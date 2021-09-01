@@ -19,6 +19,7 @@ import CustomRoute from './components/CustomRoute';
 
 
 
+
 const titleData = [
   {
     path: '/lead', component: LeadIndex
@@ -54,14 +55,13 @@ function App() {
           <Route exact path='/signup' component={Signup} />
           <CustomRoute path='/'>
             <MainLayout>
-              {titleData.map((item) => {
+              {titleData.map((item, i) => {
                 return (
-                  <Route exact path={item.path} component={item.component} />
+                  <Route exact path={item.path} key={i} component={item.component} />
                 )
               })}
             </MainLayout>
           </CustomRoute>
-
         </Switch>
       </Router>
     </AppContext.Provider>

@@ -1,10 +1,12 @@
 import { React, Component } from 'react'
 import AppContext from '../../context';
-import { Pane, Button } from 'evergreen-ui';
+import { Pane, Button, toaster } from 'evergreen-ui';
 import { CheckPicker, SelectPicker, Pagination } from 'rsuite';
 import TextForm from '../../components/TextForm';
 import 'rsuite/dist/styles/rsuite-default.css';
 import SearchBox from '../../components/SearchBox';
+import api from '../../interceptor/AxiosInterceptor';
+import moment from 'moment';
 
 export class LeadIndex extends Component {
     constructor(props) {
@@ -29,13 +31,47 @@ export class LeadIndex extends Component {
                 { 'label': 'Website', 'value': 'Website' },
                 { 'label': 'Trực tiếp đến cửa hàng', 'value': 'Trực tiếp đến cửa hàng' },
                 { 'label': 'Đến từ các nguồn khác', 'value': 'Đến từ các nguồn khác' }
-            ]
+            ],
+            chanceData: []
         }
+    }
+
+    saveChance = async () => {
+        let newChanceObj = {
+            phoneNum: this.state.phoneNum,
+            customerName: this.state.customerName,
+            sex: this.state.sex,
+            address: this.state.address,
+            service: this.state.service,
+            customerSource: this.state.customerSource,
+            note: this.state.note,
+            createdTime: moment().format('HH:mm:ss DD/MM/YYYY')
+        }
+        let chanceData = this.state.chanceData
+        console.log(this.state);
+        api.post('/index/createChance', newChanceObj).then((res) => {
+            if (res.status === 200) {
+                chanceData.push(newChanceObj)
+                this.setState({
+                    chanceData: chanceData
+                })
+                return toaster.success('Tạo cơ hội thành công');
+            }
+        })
+    }
+
+    componentWillMount = () => {
+        api.get('/index/getAllChance').then(res => {
+            this.setState({
+                chanceData: res.data
+            })
+        }).catch(err => {console.log(err.status);})
     }
 
     render() {
         this.context.setTitle('Quản lý cơ hội');
         this.context.setActiveMenu('lead');
+
         return (
             <Pane className='pt-3 flex items-start content-start'>
                 <Pane className='box-shadow-default flex flex-col p-4 mr-6 rounded-md w-500 self-stretch'>
@@ -43,25 +79,29 @@ export class LeadIndex extends Component {
                         Tạo cơ hội mới
                     </Pane>
                     <Pane className='pb-3'>
-                        <TextForm label='Số điện thoại' />
+                        <TextForm label='Số điện thoại' onChange={(e) => this.setState({ phoneNum: e.target.value })} />
                     </Pane>
                     <Pane className='pb-3 flex'>
                         <Pane className='mr-3 flex-grow'>
-                            <TextForm label='Tên khách hàng' />
+                            <TextForm label='Tên khách hàng' onChange={(e) => this.setState({ customerName: e.target.value })} />
                         </Pane>
                         <Pane className='pt-2 px-1 sv-bgr w-150 rounded-md'>
                             <Pane className='pl-3'>
                                 <label>Giới tính</label>
                             </Pane>
-                            <SelectPicker data={this.state.sexData} style={{ width: 146 }} searchable={false} placeholder='Chọn giới tính' appearance='subtle' />
+                            <SelectPicker data={this.state.sexData} style={{ width: 146 }}
+                                searchable={false} placeholder='Chọn giới tính' appearance='subtle'
+                                onChange={(value) => this.setState({ sex: value })} />
                         </Pane>
                     </Pane>
                     <Pane className='pb-3'>
-                        <TextForm label='Địa chỉ' />
+                        <TextForm label='Địa chỉ' onChange={(e) => this.setState({ address: e.target.value })} />
                     </Pane>
                     <Pane className='pb-3'>
                         <Pane className='sv-bgr h-16 pl-1 pr-2 py-2 w-full rounded-md flex items-center'>
-                            <CheckPicker data={this.state.serviceData} style={{ width: 460 }} appearance='subtle' searchable={false} placeholder='Lựa chọn dịch vụ' />
+                            <CheckPicker data={this.state.serviceData} style={{ width: 460 }}
+                                appearance='subtle' searchable={false} placeholder='Lựa chọn dịch vụ'
+                                onChange={(value) => this.setState({ service: value })} />
                         </Pane>
                     </Pane>
                     <Pane className='pb-3'>
@@ -69,17 +109,19 @@ export class LeadIndex extends Component {
                             <Pane className='pl-3'>
                                 <label>Nguồn khách đến</label>
                             </Pane>
-                            <SelectPicker data={this.state.visitorData} searchable={false} placeholder='Lựa chọn nguồn khách đến' appearance='subtle' />
+                            <SelectPicker data={this.state.visitorData} searchable={false}
+                                placeholder='Lựa chọn nguồn khách đến' appearance='subtle'
+                                onChange={(value) => this.setState({ customerSource: value })} />
                         </Pane>
                     </Pane>
                     <Pane className='pb-3'>
                         <Pane className='py-2 px-4 flex flex-col sv-bgr rounded-md'>
                             <label>Ghi chú</label>
-                            <textarea rows='7' cols='60'></textarea>
+                            <textarea rows='7' cols='60' onChange={(e) => this.setState({ note: e.target.value })} />
                         </Pane>
                     </Pane>
                     <Pane className='pb-3 h-8 w-auto flex justify-end'>
-                        <Button appearance="primary">
+                        <Button appearance="primary" onClick={this.saveChance}>
                             Tạo cơ hội
                         </Button>
                     </Pane>
@@ -114,121 +156,35 @@ export class LeadIndex extends Component {
                             Action
                         </Pane>
                     </Pane>
-                    <Pane className='created-chance flex'>
-                        <Pane className='created-item font-semibold text-sm w-200'>
-                            Phạm Phi Long
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-120'>
-                            0368980597
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-353'>
-                            Nâng ngực
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-100'>
-                            longpp97
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-150'>
-                            11:14:50 13/08/2021
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-120 flex flex-grow justify-center'>
-                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.57699 1.32416H5.46116C2.89866 1.32416 1.29199 3.13832 1.29199 5.70666V12.635C1.29199 15.2033 2.89116 17.0175 5.46116 17.0175H12.8145C15.3853 17.0175 16.9845 15.2033 16.9845 12.635V9.27832" stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M6.35652 8.10074L12.584 1.87324C13.3599 1.09824 14.6174 1.09824 15.3932 1.87324L16.4074 2.88741C17.1832 3.66324 17.1832 4.92158 16.4074 5.69658L10.1499 11.9541C9.81069 12.2932 9.35069 12.4841 8.87069 12.4841H5.74902L5.82736 9.33408C5.83902 8.87074 6.02819 8.42908 6.35652 8.10074Z" stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </Pane>
-                    </Pane>
-                    <Pane className='created-chance flex'>
-                        <Pane className='created-item font-semibold text-sm w-200'>
-                            Phạm Phi Long
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-120'>
-                            0368980597
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-353'>
-                            Nâng ngực
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-100'>
-                            longpp97
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-150'>
-                            11:14:50 13/08/2021
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-120 flex flex-grow justify-center'>
-                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.57699 1.32416H5.46116C2.89866 1.32416 1.29199 3.13832 1.29199 5.70666V12.635C1.29199 15.2033 2.89116 17.0175 5.46116 17.0175H12.8145C15.3853 17.0175 16.9845 15.2033 16.9845 12.635V9.27832" stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M6.35652 8.10074L12.584 1.87324C13.3599 1.09824 14.6174 1.09824 15.3932 1.87324L16.4074 2.88741C17.1832 3.66324 17.1832 4.92158 16.4074 5.69658L10.1499 11.9541C9.81069 12.2932 9.35069 12.4841 8.87069 12.4841H5.74902L5.82736 9.33408C5.83902 8.87074 6.02819 8.42908 6.35652 8.10074Z" stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </Pane>
-                    </Pane>
-                    <Pane className='created-chance flex'>
-                        <Pane className='created-item font-semibold text-sm w-200'>
-                            Phạm Phi Long
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-120'>
-                            0368980597
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-353'>
-                            Nâng ngực
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-100'>
-                            longpp97
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-150'>
-                            11:14:50 13/08/2021
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-120 flex flex-grow justify-center'>
-                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.57699 1.32416H5.46116C2.89866 1.32416 1.29199 3.13832 1.29199 5.70666V12.635C1.29199 15.2033 2.89116 17.0175 5.46116 17.0175H12.8145C15.3853 17.0175 16.9845 15.2033 16.9845 12.635V9.27832" stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M6.35652 8.10074L12.584 1.87324C13.3599 1.09824 14.6174 1.09824 15.3932 1.87324L16.4074 2.88741C17.1832 3.66324 17.1832 4.92158 16.4074 5.69658L10.1499 11.9541C9.81069 12.2932 9.35069 12.4841 8.87069 12.4841H5.74902L5.82736 9.33408C5.83902 8.87074 6.02819 8.42908 6.35652 8.10074Z" stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </Pane>
-                    </Pane>
-                    <Pane className='created-chance flex'>
-                        <Pane className='created-item font-semibold text-sm w-200'>
-                            Phạm Phi Long
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-120'>
-                            0368980597
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-353'>
-                            Nâng ngực
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-100'>
-                            longpp97
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-150'>
-                            11:14:50 13/08/2021
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-120 flex flex-grow justify-center'>
-                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.57699 1.32416H5.46116C2.89866 1.32416 1.29199 3.13832 1.29199 5.70666V12.635C1.29199 15.2033 2.89116 17.0175 5.46116 17.0175H12.8145C15.3853 17.0175 16.9845 15.2033 16.9845 12.635V9.27832" stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M6.35652 8.10074L12.584 1.87324C13.3599 1.09824 14.6174 1.09824 15.3932 1.87324L16.4074 2.88741C17.1832 3.66324 17.1832 4.92158 16.4074 5.69658L10.1499 11.9541C9.81069 12.2932 9.35069 12.4841 8.87069 12.4841H5.74902L5.82736 9.33408C5.83902 8.87074 6.02819 8.42908 6.35652 8.10074Z" stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </Pane>
-                    </Pane>
-                    <Pane className='created-chance flex'>
-                        <Pane className='created-item font-semibold text-sm w-200'>
-                            Phạm Phi Long
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-120'>
-                            0368980597
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-353'>
-                            Nâng ngực
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-100'>
-                            longpp97
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-150'>
-                            11:14:50 13/08/2021
-                        </Pane>
-                        <Pane className='created-item h-10 p-2.5 font-normal text-sm w-120 flex flex-grow justify-center'>
-                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.57699 1.32416H5.46116C2.89866 1.32416 1.29199 3.13832 1.29199 5.70666V12.635C1.29199 15.2033 2.89116 17.0175 5.46116 17.0175H12.8145C15.3853 17.0175 16.9845 15.2033 16.9845 12.635V9.27832" stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M6.35652 8.10074L12.584 1.87324C13.3599 1.09824 14.6174 1.09824 15.3932 1.87324L16.4074 2.88741C17.1832 3.66324 17.1832 4.92158 16.4074 5.69658L10.1499 11.9541C9.81069 12.2932 9.35069 12.4841 8.87069 12.4841H5.74902L5.82736 9.33408C5.83902 8.87074 6.02819 8.42908 6.35652 8.10074Z" stroke="#333333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </Pane>
-                    </Pane>
+
+                    {this.state.chanceData.map((chance, index) => {
+                        return (
+                            <Pane className='created-chance flex' key={index}>
+                                <Pane className='created-item font-semibold text-sm w-200'>
+                                    {chance.customerName}
+                                </Pane>
+                                <Pane className='created-item h-10 p-2.5 font-normal text-sm w-120'>
+                                    {chance.phoneNum}
+                                </Pane>
+                                <Pane className='created-item h-10 p-2.5 font-normal text-sm w-353'>
+                                    {chance.service.join(', ')}
+                                </Pane>
+                                <Pane className='created-item h-10 p-2.5 font-normal text-sm w-100'>
+                                    longpp97
+                                </Pane>
+                                <Pane className='created-item h-10 p-2.5 font-normal text-sm w-150'>
+                                    {chance.createdTime}
+                                </Pane>
+                                <Pane className='created-item h-10 p-2.5 font-normal text-sm w-120 flex flex-grow justify-center'>
+                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8.57699 1.32416H5.46116C2.89866 1.32416 1.29199 3.13832 1.29199 5.70666V12.635C1.29199 15.2033 2.89116 17.0175 5.46116 17.0175H12.8145C15.3853 17.0175 16.9845 15.2033 16.9845 12.635V9.27832" stroke="#333333" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                        <path fillRule="evenodd" clipRule="evenodd" d="M6.35652 8.10074L12.584 1.87324C13.3599 1.09824 14.6174 1.09824 15.3932 1.87324L16.4074 2.88741C17.1832 3.66324 17.1832 4.92158 16.4074 5.69658L10.1499 11.9541C9.81069 12.2932 9.35069 12.4841 8.87069 12.4841H5.74902L5.82736 9.33408C5.83902 8.87074 6.02819 8.42908 6.35652 8.10074Z" stroke="#333333" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                </Pane>
+                            </Pane>
+                        )
+                    })}
+
                     <Pane className='pagination h-12 w-auto flex justify-center items-center'>
                         <Pagination
                             prev={true}

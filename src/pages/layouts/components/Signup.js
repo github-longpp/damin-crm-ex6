@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Redirect } from 'react-router';
 
 const api = axios.create({
-    baseURL: 'http://68.183.235.47:4000/api/auth/signup'
+    baseURL: 'http://localhost:4000/auth/signup'
 })
 
 export class Signup extends Component {
@@ -36,7 +36,13 @@ export class Signup extends Component {
                 this.setState({ redirect: true })
             }
         ).catch(
-            () => toaster.danger('Email đã tồn tại')
+            (err) => {
+                if (err.response) {
+                    if (err.response.data === 'Enter not enough information') toaster.danger('Vui lòng nhập đủ thông tin')
+                    if (err.response.data === 'Email is invalid') toaster.danger('Email hoặc mật khẩu không đúng')
+                    if (err.response.data === 'Email is exist') toaster.danger('Email đã tồn tại')
+                }
+            }
         )
     }
 
